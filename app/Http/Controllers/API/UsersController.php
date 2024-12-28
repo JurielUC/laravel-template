@@ -60,13 +60,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'password' => 'required',
-            'email' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            // 'image_url' => 'image|mimes:jpeg,png,jpg,gif,svg',
-        ];
+        $rules = [];
 
         $_input = $request->input();
 
@@ -236,4 +230,113 @@ class UsersController extends Controller
 
         return response()->json($data);
     }
+
+    public function universal_uploader(Request $request)
+	{
+		$rules = [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ];
+
+        $_input = $request->all();
+
+        $validator = Validator::make($_input, $rules);
+
+        if ($validator->fails()) {
+			$errors = $validator->errors()->toArray();
+
+			$data = [
+				'status' => 'Fail',
+				'errors' => $errors
+			];
+        } else {
+			$file = $request->file('file');
+
+            $directory = 'file';
+			if (isset($_input['path_name'])) {
+                $directory = $_input['path_name'];
+            }
+
+			$extension = strtolower($file->getClientOriginalExtension());
+			$filename = 'LF-' . rand(1000, 9999) . '-' . time() . '.'.$extension;
+
+			$response = $file->storeAs($directory, $filename, 'public');
+            
+			if ($response) {
+                $url = env('APP_URL')."/storage/{$response}";
+
+				$data = [
+					'status' => 'Success',
+					'data' => [
+						'url' => $url,
+					]
+				];
+			} else {
+				$errors = [
+					'Error uploading the file!'
+				];
+
+				$data = [
+					'status' => 'Fail',
+					'errors' => $errors
+				];				
+			}
+        }
+		
+		return response()->json($data);
+	}
+
+    public function universal_file_uploader(Request $request)
+	{
+		$rules = [
+            'file' => 'required',
+        ];
+
+        $_input = $request->all();
+
+        $validator = Validator::make($_input, $rules);
+
+        if ($validator->fails()) {
+			$errors = $validator->errors()->toArray();
+
+			$data = [
+				'status' => 'Fail',
+				'errors' => $errors
+			];
+        } else {
+			$file = $request->file('file');
+
+            $directory = 'file';
+			if (isset($_input['path_name'])) {
+                $directory = $_input['path_name'];
+            }
+
+			$extension = strtolower($file->getClientOriginalExtension());
+			$filename = 'LF-' . rand(1000, 9999) . '-' . time() . '.'.$extension;
+
+			$response = $file->storeAs($directory, $filename, 'public');
+            
+			if ($response) {
+                $url = env('APP_URL')."/storage/{$response}";
+
+				$data = [
+					'status' => 'Success',
+					'data' => [
+						'url' => $url,
+                        'extension' => $extension
+					]
+				];
+			} else {
+				$errors = [
+					'Error uploading the file!'
+				];
+
+				$data = [
+					'status' => 'Fail',
+					'errors' => $errors
+				];				
+			}
+        }
+		
+		return response()->json($data);
+	}
 }
