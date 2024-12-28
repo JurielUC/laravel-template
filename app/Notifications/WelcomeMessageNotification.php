@@ -45,17 +45,19 @@ class WelcomeMessageNotification extends Notification
     {
         $_data = $this->_data;
         $user = $_data['user'];
+
+        $app_title = env('APP_TITLE');
     
         return (new MailMessage)
-            ->subject("Welcome to Lemery Tourism website")
+            ->subject("Welcome to {$app_title} website")
             ->greeting("Hello {$user['first_name']},")
-            ->line(new HtmlString("Welcome to the Lemery Tourism website! We're thrilled to have you join our community."))
+            ->line(new HtmlString("Welcome to the {$app_title} website! We're thrilled to have you join our community."))
             ->line(new HtmlString("Explore our features and stay updated with the latest events, attractions, and activities in Lemery."))
             ->line(new HtmlString("Feel free to personalize your profile, and discover what our platform has to offer."))
             ->line(new HtmlString(""))
             ->line(new HtmlString("If you have any questions or need assistance, don't hesitate to reach out to our support team."))
             ->line(new HtmlString(''))
-            ->salutation(new HtmlString('Best Regards, <br /><i>Lemery Tourism Administrator</i>'));
+            ->salutation(new HtmlString("Best Regards, <br /><i>{$app_title} Administrator</i>"));
     }
     
     /**
@@ -68,14 +70,16 @@ class WelcomeMessageNotification extends Notification
     {
         $_data = $this->_data;
         $user = $_data['user'];
+
+        $app_title = env('APP_TITLE');
         
         $url = env('FRONTEND_APP_URL').'/welcome';
     
         return [
             'url' => $url,
             'action' => 'View',
-            'subject' => "Welcome to Lemery Tourism website",
-            'message' => "Thank you for signing up to the Lemery Tourism website. Explore our features and stay updated with the latest events, attractions, and activities in Lemery."
+            'subject' => "Welcome to {$app_title} website",
+            'message' => "Thank you for signing up to the {$app_title} website. Explore our features and stay updated with the latest events, attractions, and activities in Lemery."
         ];
     }    
 }

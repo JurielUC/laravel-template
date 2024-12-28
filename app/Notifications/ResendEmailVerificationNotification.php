@@ -45,13 +45,16 @@ class ResendEmailVerificationNotification extends Notification
     {
         $_data = $this->_data;
         $user = $_data['user'];
+        
+        $app_title = env('APP_TITLE');
+        $app_support_email = env('APP_SUPPORT_EMAIL');
 
         $verify_url = env('APP_URL')."/user/verified?code={$user['remember_token']}&email={$user['email']}";
 
         return (new MailMessage)
             ->subject("Email Verification Link Resent: Complete Your Registration")
             ->greeting("Hello,")
-            ->line(new HtmlString("We noticed that you haven't confirmed your email address yet. To complete your registration with Lemery Tourism website, please confirm your email by clicking the link below:"))
+            ->line(new HtmlString("We noticed that you haven't confirmed your email address yet. To complete your registration with {$app_title} website, please confirm your email by clicking the link below:"))
             ->line(new HtmlString(""))
             ->line(new HtmlString("<a href='{$verify_url}' style='text-decoration: none;'>Confirm Your Email Address</a>"))
             ->line(new HtmlString(''))
@@ -59,9 +62,9 @@ class ResendEmailVerificationNotification extends Notification
             ->line(new HtmlString(''))
             ->line(new HtmlString("If you did not sign up for an account, please disregard this email."))
             ->line(new HtmlString(''))
-            ->line(new HtmlString('If you have any questions or need assistance, feel free to reach out to our support team at [support@example.com].'))
+            ->line(new HtmlString("If you have any questions or need assistance, feel free to reach out to our support team at {$app_support_email}."))
             ->line(new HtmlString(''))
-            ->salutation(new HtmlString('Best Regards, <br /><i>Lemery Tourism Administrator</i>'));
+            ->salutation(new HtmlString("Best Regards, <br /><i>{$app_title} Administrator</i>"));
     }
 
     /**

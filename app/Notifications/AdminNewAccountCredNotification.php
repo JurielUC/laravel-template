@@ -46,11 +46,12 @@ class AdminNewAccountCredNotification extends Notification
         $_data = $this->_data;
         $user = $_data['user'];
         $password = $_data['password'];
+        $app_title = env('APP_TITLE');
         
         $url = env('FRONTEND_APP_URL').'/admin/login';
     
         return (new MailMessage)
-            ->subject("Welcome to Lemery Tourism Website")
+            ->subject("Welcome to {$app_title}")
             ->greeting("Hi {$user['first_name']},")
             ->line(new HtmlString("I hope this email finds you well."))
             ->line(new HtmlString(""))
@@ -63,7 +64,7 @@ class AdminNewAccountCredNotification extends Notification
             ->line(new HtmlString("Login <a href='{$url}'>here</a>."))
             ->line(new HtmlString("If you have any questions or need assistance, please don't hesitate to contact our support team."))
             ->line(new HtmlString(''))
-            ->salutation(new HtmlString('Best Regards, <br /><i>Lemery Tourism Website</i>'));
+            ->salutation(new HtmlString("Best Regards, <br /><i>{$app_title} Website</i>"));
     }
     
     /**
@@ -76,13 +77,14 @@ class AdminNewAccountCredNotification extends Notification
     {
         $_data = $this->_data;
         $user = $_data['user'];
+        $app_title = env('APP_TITLE');
         
         $url = env('FRONTEND_APP_URL').'/admin/login';
     
         return [
             'url' => $url,
             'action' => 'View',
-            'subject' => "Welcome to Lemery Tourism Website",
+            'subject' => "Welcome to {$app_title} Website",
             'message' => "Your credentials has been sent to your email."
         ];
     }    
